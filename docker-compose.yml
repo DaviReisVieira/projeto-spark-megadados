@@ -1,0 +1,29 @@
+version: '3.3'
+
+services:
+  spark:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+      - "4040:4040"
+    environment:
+      - ENABLE_INIT_DAEMON=false
+    volumes:
+      - ./:/home/spark
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+      # resources:
+      #   limits:
+      #     cpus: '6'
+      #     memory: 8G
+      #   reservations:
+      #     cpus: '6'
+      #     memory: 8G
